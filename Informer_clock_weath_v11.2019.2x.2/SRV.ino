@@ -485,7 +485,7 @@ void handle_setup(){
   
   if(printCom) {
     printTime();
-    Serial.println("TBD: "+String(timeDay)+", VBD: "+String(volBrightnessD)+", TBN: "+String(timeNight)+", VBN: "+String(volBrightnessN)+",  kuOn: "+String(kuOn)+",  kuOff: "+String(kuOff)+",  rotate0: "+String(rotate0)+", rotate1: "+String(rotate1)+", clockNight: "+String(clockNight)+", buzzerSet: "+String(buzzerSet));
+    Serial.println("TBD: "+String(timeDay)+", VBD: "+String(volBrightnessD)+", TBN: "+String(timeNight)+", VBN: "+String(volBrightnessN)+",  kuOn: "+String(kuOn)+",  kuOff: "+String(kuOff)+",  rotate0: "+String(rotate0)+", rotate1: "+String(rotate1)+", clockNight: "+String(clockNight)+", buzzerOnOffku: "+String(buzzerOnOffku)+", buzzerOnOff: "+String(buzzerOnOff)+", buzzerSet: "+String(buzzerSet));
   }
   saveConfig(); 
   server.send(200, "text/plain", "OK");
