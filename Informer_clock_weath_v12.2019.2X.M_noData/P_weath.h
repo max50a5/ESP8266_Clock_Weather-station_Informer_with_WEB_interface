@@ -197,15 +197,15 @@ const char P_weath[] PROGMEM =  R"=====(
                             <td><span class="opt_cn">{{location_country}}</span></td>
                         </tr>
                         <tr>
-                            <td align = "right"><span class="opt_cn">Время обновления GMT</span></td>
+                            <td align = "right"><span class="opt_cn">Время обновления</span></td>
                             <td><span class="opt_cn">{{location_localtime}}</span></td>
                         </tr>
                         <tr>
-                            <td align = "right"><span class="opt_cn">Восход GMT</span></td>
+                            <td align = "right"><span class="opt_cn">Восход</span></td>
                             <td><span class="opt_cn">{{location_sunrise}}</span></td>
                         </tr>
                         <tr>
-                            <td align = "right"><span class="opt_cn">Закат GMT</span></td>
+                            <td align = "right"><span class="opt_cn">Закат</span></td>
                             <td><span class="opt_cn">{{location_sunset}}</span></td>
                         </tr>
                         <tr>

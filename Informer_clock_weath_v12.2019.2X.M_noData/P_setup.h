@@ -394,8 +394,8 @@ const char P_setup[] PROGMEM =  R"=====(
                         <tr>
                             <td></td>
                             <td><select id = "pressSys">
-                              <option value = "0"> hPa </option>
-                              <option value = "1"> mmHg </option>
+                              <option value = "0"> гПа </option>
+                              <option value = "1"> ммРс </option>
                             </select></td>
                             <td></td>
                             <td></td>

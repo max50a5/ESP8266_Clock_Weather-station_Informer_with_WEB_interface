@@ -132,6 +132,7 @@ String jsonConfig = "{}";
 String jsonTime = "{}";
 // ---------- Змінні для роботи локального годинника
 float timeZone = 7.0;                                                                       //  часовий пояс
+float hourCorr;
 bool isDayLightSaving = false;
 long localEpoc = 0;
 long localMillisAtUpdate = 0;
@@ -207,11 +208,11 @@ float hum = 0;
 float humSi7021 = 0;
 float celsiusSi7021 = 0;
 bool si7021 = false;
-float corrTempD = -3.3;
-float corrTempU = -1.5;
-float corrTempH = 0.5;
+float corrTempD = 0;
+float corrTempU = 0;
+float corrTempH = 0;
 float corrHumi  = 0;
-int   corrPress = -21;
+int   corrPress = 0;
 byte sensorDom = 0;          //NONE = 0, DS18B20 = 1, Si7021 = 2, BMP280 = 3, BME280 = 4;
 byte sensorUl = 0;           //NONE = 0, DS18B20 = 1, Si7021 = 2, BMP280 = 3, BME280 = 4;
 byte sensorHome = 0;         //NONE = 0, DS18B20 = 1, Si7021 = 2, BMP280 = 3, BME280 = 4;
@@ -1093,7 +1094,8 @@ void getNTPtime() {
     if(month < 3 || month > 10) summerTime = false;             // не переходимо на літній час в січні, лютому, листопаді і грудню
     if(month > 3 && month < 10) summerTime = true;              // Sommerzeit лічимо в квіні, травні, червені, липні, серпені, вересені
     if(month == 3 && (hour + 24 * day) >= (3 + 24 * (31 - (5 * year / 4 + 4) % 7)) || month == 10 && (hour + 24 * day) < (3 + 24 * (31 - (5 * year / 4 + 1) % 7))) summerTime = true; 
-    epoch = epoch + (int)(timeZone*3600 + (3600*(isDayLightSaving && summerTime)));      
+    epoch = epoch + (int)(timeZone*3600 + (3600*(isDayLightSaving && summerTime))); 
+    hourCorr = timeZone + (isDayLightSaving && summerTime);    
     g_year = 0;
     int days = 0;
     uint32_t time;
@@ -1481,7 +1483,7 @@ void sensorsSi7021() {  //2
 void sensorsBmp() {  //3
   if(bmp280 == true) {
     tempBmp = bmp.readTemperature();
-    pressBmp = bmp.readPressure() * (pressSys == 0 ? 0.007500613026439 : 1);
+    pressBmp = bmp.readPressure() * (pressSys == 1 ? 0.007500613026439 : 1);
     pressBmp = (int) pressBmp;
     altBmp = bmp.readAltitude(1013.25);
     if(printCom) {
@@ -1491,7 +1493,7 @@ void sensorsBmp() {  //3
   }
   if(BMP180 == true) {
     tempBmp = bmp180.readTemperature();
-    pressBmp = bmp180.readPressure() * (pressSys == 0 ? 0.007500613026439 : 1);
+    pressBmp = bmp180.readPressure() * (pressSys == 1 ? 0.007500613026439 : 1);
     pressBmp = (int) pressBmp;
     altBmp = bmp180.readAltitude(101500);
     if(printCom) {
