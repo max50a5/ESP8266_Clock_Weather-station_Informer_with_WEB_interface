@@ -320,8 +320,8 @@ const char P_setup[] PROGMEM =  R"=====(
                         <tr>
                             <td align = "right"><span class="opt_cn">Кнопка подключена к GPIO16 и к</span></td>
                             <td><select id = "butStat">
-                                <option value = "0"> - 5V </option>
-                                <option value = "1"> + 5V </option>
+                                <option value = "0"> - 5В </option>
+                                <option value = "1"> + 5В </option>
                             </select></td>
                         </tr>
                     </table>
