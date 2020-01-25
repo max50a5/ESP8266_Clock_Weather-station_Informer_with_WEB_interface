@@ -58,7 +58,7 @@ const char P_weath[] PROGMEM =  R"=====(
                             <td><input type="text" class="field" id="cityID1" value="{{cityID1}}" class="form-control" pattern="[ 0-9a-zA-Zа-яА-Я._]{1,32}"></td>
                         </tr>
                         <tr>
-                            <td align = "right"><span class="opt_cn">Отображаемое название города</span></td>
+                            <td align = "right"><span class="opt_cn">Показываемое название города</span></td>
                             <td><input type="text" class="field form-control" id="personalCityName" value="{{personalCityName}}" pattern=".{1,25}"></td>
                         </tr>
                         <tr>
