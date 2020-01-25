@@ -374,7 +374,7 @@ void loop() {
   if(second != lastSecond) {                                                            // на початку нової секунди скидаємо secFr в "0"
     lastSecond = second;
     if(volBrightnessAuto) {
-      levelBridhtness = map(analogRead(brightPin), 1023, 0, 2, 15);
+      levelBridhtness = map(analogRead(brightPin), 1023, 0, 0, 15);
       sendCmdAll(CMD_INTENSITY, levelBridhtness);
     } else {
       if(timeDay<timeNight?(hour >= timeDay && hour < timeNight):(hour>=timeDay || hour<timeNight)) sendCmdAll(CMD_INTENSITY, volBrightnessD);
