@@ -620,13 +620,13 @@ void loop() {
     refreshAll();
   }
   //------------- НАШ ЧАС ----------------------------------------------------------------
-  if(hour == 22 && minute == 55) {                                                      // якщо наш час - то іде повідомлення для коханої
+  //if(hour == 22 && minute == 55) {                                                      // якщо наш час - то іде повідомлення для коханої
     //bip();
     //bip();
     //bip();
-    printStringWithShift("       \200\200\200 Моей любимой Заюшке!!! \200\200\200", timeScrollSpeed, 1);
-    return;
-  }
+    //printStringWithShift("       \200\200\200 Моей любимой Заюшке!!! \200\200\200", timeScrollSpeed, 1);
+    //return;
+  //}
   // ---------- ВИВІД НА ЕКРАН ГОДИННИКА АБО ТЕМПЕРАТУРИ ЧИ ВОЛОГОСТІ------------------------
   if(!alarm_stat && secFr == 0 && butMode == 0 && !bigCklock) {
     if(second == 25 && t1 != 85 && sensorDom) {
@@ -1968,7 +1968,7 @@ void sensorsSi7021() {  //2
 void sensorsBmp() {  //3
   if(bmp280 == true) {
     tempBmp = bmp.readTemperature();
-    pressBmp = bmp.readPressure() * (pressSys == 0 ? 0.007500613026439 : 1);
+    pressBmp = bmp.readPressure() * (pressSys == 1 ? 0.007500613026439 : 1);
     pressBmp = (int) pressBmp;
     altBmp = bmp.readAltitude(1013.25);
     if(printCom) {
@@ -1978,7 +1978,7 @@ void sensorsBmp() {  //3
   }
   if(BMP180 == true) {
     tempBmp = bmp180.readTemperature();
-    pressBmp = bmp180.readPressure() * (pressSys == 0 ? 0.007500613026439 : 1);
+    pressBmp = bmp180.readPressure() * (pressSys == 1 ? 0.007500613026439 : 1);
     pressBmp = (int) pressBmp;
     altBmp = bmp180.readAltitude(101500);
     if(printCom) {
