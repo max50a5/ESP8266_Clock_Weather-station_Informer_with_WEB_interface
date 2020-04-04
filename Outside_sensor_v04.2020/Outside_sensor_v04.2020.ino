@@ -69,6 +69,8 @@ char mqtt_pub_temp[25] = "Informer/temp";
 char mqtt_pub_hum[25] = "Informer/hum";
 char mqtt_pub_press[25] = "Informer/press";
 bool mqttOn = true;
+// ===================================================дисплей
+bool oledOnOff = 1;
 // ===================================================зуммер
 #define buzzerPin 12                                                                    //GPIO 12 / D6
 bool buzzerOnOff = 0;

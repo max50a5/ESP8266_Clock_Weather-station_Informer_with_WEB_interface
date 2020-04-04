@@ -10,7 +10,7 @@ const char P_setup[] PROGMEM =  R"=====(
         <script type = "text/javascript">
             function set_setup(submit) {
                 server = "/setup?sensorTemp=" + val('sensorTemp') + "&sensorHumi=" + val('sensorHumi') + "&sensorPrAl=" + val('sensorPrAl') + "&pressSys=" + val('pressSys') + "&akbOnOff=" + val_sw('akbOnOff');
-                server += "&corrTemp=" + val('corrTemp') + "&corrHumi=" + val('corrHumi') + "&corrPress=" + val('corrPress') + "&buzzerOnOff=" + val_sw('buzzerOnOff') + "&buzzerSet=" + val_sw('buzzerSet');
+                server += "&corrTemp=" + val('corrTemp') + "&corrHumi=" + val('corrHumi') + "&corrPress=" + val('corrPress') + "&buzzerOnOff=" + val_sw('buzzerOnOff') + "&buzzerSet=" + val_sw('buzzerSet' )+ "&oledOnOff=" + val_sw('oledOnOff');
                 send_request(submit,server);
             }
         </script>
@@ -33,6 +33,11 @@ const char P_setup[] PROGMEM =  R"=====(
             <div id="main_unit">
                 <center>
                     <paragraph><span class="opt_cn">Настройки параметров</span></paragraph>
+                      <label class="switch"><span class="opt_cn">Использовать дисплей (Да/Нет)</span>
+                        <input type="checkbox" id="oledOnOff">
+                        <span class="switch-btn"></span>
+                    </label>   
+                    <br>                      
                      <label class="switch"><span class="opt_cn">Использовать АКБ (Да/Нет)</span>
                         <input type="checkbox" id="akbOnOff">
                         <span class="switch-btn"></span>

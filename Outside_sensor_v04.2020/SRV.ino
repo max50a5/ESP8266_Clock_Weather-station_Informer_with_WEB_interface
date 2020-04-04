@@ -77,6 +77,8 @@ void handle_ConfigSetupJson() {
   String json = "{";
   json += "\"buzzerOnOff\":\"";
   json += (buzzerOnOff==1?"checked":"");
+  json += "\",\"oledOnOff\":\"";
+  json += (oledOnOff==1?"oledOnOff":"");
   json += "\",\"akbOnOff\":\"";
   json += (akbOnOff==1?"checked":"");
   json += "\",\"buzzerSet\":\"";
@@ -129,6 +131,7 @@ void handle_thing_on() {
 //======================================================================================================
 void handle_setup(){
   buzzerOnOff = server.arg("buzzerOnOff").toInt();
+  oledOnOff = server.arg("oledOnOff").toInt();
   akbOnOff = server.arg("akbOnOff").toInt();
   buzzerSet = server.arg("buzzerSet").toInt();
   String sT = server.arg("sensorTemp");

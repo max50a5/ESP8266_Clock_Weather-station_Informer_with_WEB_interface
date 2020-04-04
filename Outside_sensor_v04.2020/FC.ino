@@ -22,6 +22,7 @@ bool loadConfig() {                                                // Заван
   thingOn = doc["thingOn"];
   updateOTA = doc["updateOTA"];
   buzzerOnOff = doc["buzzerOnOff"];
+  oledOnOff = doc["oledOnOff"];
   akbOnOff = doc["akbOnOff"];
   buzzerSet = doc["buzzerSet"];
   mqttOn = doc["mqttOn"];
@@ -53,6 +54,7 @@ bool saveConfig() {
   doc["writeapikey"] = writeapikey;
   doc["thingOn"] = thingOn;
   doc["buzzerOnOff"] = buzzerOnOff;
+  doc["oledOnOff"] = oledOnOff;
   doc["akbOnOff"] = akbOnOff;
   doc["buzzerSet"] = buzzerSet;
   doc["mqttOn"] = mqttOn;
