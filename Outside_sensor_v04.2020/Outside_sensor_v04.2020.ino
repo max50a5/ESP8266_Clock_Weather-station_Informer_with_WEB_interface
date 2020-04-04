@@ -81,7 +81,6 @@ float uBat = 0.0;
 OneWire  ds(2);                                                                         // DS18B20 подключен к 0 пину (резистор на 4.7к обязателен)
 // ===================================================
 // ----------
-#include "fonts.h"
 boolean WIFI_connected = false;
 String jsonConfig = "{}";
 String jsonTime = "{}";
@@ -131,6 +130,7 @@ void setup() {
   delay(500);
   SPIFFS.begin();
   loadConfig();
+  sendToThingSpeak();
   //loadTime();
   //lang();
   pinMode(A0, INPUT);
@@ -385,15 +385,15 @@ void sendToThingSpeak(){
   str+=writeapikey;
   if(sensorTemp>0){
     str+="&field1=";
-    str+=String(temp);
+    str+=String(t3);
   }
   if(sensorHumi>0){
     str+="&field2=";
-    str+=String(hum);
+    str+=String(h0);
   }
   if(sensorPrAl>0){
     str+="&field3=";
-    str+=String(pres);
+    str+=String(p0);
   }
   if(akbOnOff == 1){
   str+="&field4=";
