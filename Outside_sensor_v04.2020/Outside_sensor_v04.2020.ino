@@ -70,17 +70,21 @@ char mqtt_pub_hum[25] = "Informer/hum";
 char mqtt_pub_press[25] = "Informer/press";
 bool mqttOn = true;
 // ===================================================дисплей
+#include "SSD1306.h"  // ESP8266_and_ESP32_OLED_driver_for_SSD1306_displays
+#include "logo.h"  // Файл с картинкой
+#include "bat_low.h"  // Файл с картинкой
+SSD1306  display(0x3c, D2, D1);  // ADDRESS, SDA, SCL
 bool oledOnOff = 1;
 // ===================================================зуммер
 #define buzzerPin 12                                                                    //GPIO 12 / D6
 bool buzzerOnOff = 0;
-bool buzzerSet = 1;
+bool buzzerSet = 0;
 // ===================================================adc
 bool akbOnOff = 0;
 unsigned int raw = 0;
 float uBat = 0.0;
 // ===================================================ds18
-OneWire  ds(2);                                                                         // DS18B20 подключен к 0 пину (резистор на 4.7к обязателен)
+OneWire  ds(2);                                                                         // DS18B20 подключен к 2 пину (резистор на 4.7к обязателен)
 // ===================================================
 // ----------
 boolean WIFI_connected = false;
@@ -126,13 +130,16 @@ byte sensorHumi = 0;         //NONE = 0, NONE    = 1, Si7021 = 2, NONE   = 3, BM
 byte sensorPrAl = 0;         //NONE = 0, NONE    = 1, NONE   = 2, BMP280 = 3, BME280 = 4;
 //======================================================================================
 void setup() {
+  // Первоначальные настройки дисплея
+  display.init();
+  display.flipScreenVertically();
+  display.setFont(ArialMT_Plain_24);  
   Wire.begin(); 
   //pinMode(BUT_PIN, INPUT);
   //digitalWrite(BUT_PIN, !butStat);
   delay(500);
   SPIFFS.begin();
   loadConfig();
-  sendToThingSpeak();
   //loadTime();
   //lang();
   pinMode(A0, INPUT);
@@ -188,9 +195,8 @@ void setup() {
   MQTTclient.connect(mqtt_name);
 }
 //==========================================
-void callback(char* topic, byte* payload, unsigned int length) { // получаем знаковое число с десятичной плавающей запятой
-  if(!mqttOn) return;
-  
+void callback(char* topic, byte* payload, unsigned int length) { 
+  if(!mqttOn) return;  
 }
 
 //======================================================================================
@@ -203,8 +209,13 @@ void reconnect() {
 //======================================================================================
 //======================================================================================
 void loop() {
+  // see http://blog.squix.org/2015/05/esp8266-nodemcu-how-to-create-xbm.html
+  display.clear();
+  display.drawXbm(0, 0, logo_width, logo_height, logo_bits);  //рисуем лого
+  display.display();
+  delay(2000);  
   if(updateOTA) ArduinoOTA.handle();
-  server.handleClient();                                                                // дозволяємо HTTP серверу відповідать на запити
+  server.handleClient();                                                                // позволяем HTTP серверу ответ на запрос
   //updateTime();                                                                         // оновлюємо час
   //buttonInter();
 
@@ -224,7 +235,7 @@ void loop() {
 //      }
 //    }
 
-    // ---------- 30 перевірка доступності WiFi мережі ---// повторне підк. до WiFi кожну 1, 6, 11, 16...56 хв.
+    // ---------- 30 проверка доступности WiFi сети --- // повторное подк. к WiFi каждую 1, 6, 11, 16 ... 56 мин.
 //    if(second>30 && second<38 && !alarm_stat){
 //      if(apStart && millis()>1800000) apStart=0;
 //      if((WiFi.status() != WL_CONNECTED || !WIFI_connected) && !apStart) {
@@ -235,27 +246,29 @@ void loop() {
 //        }
 //      }
 //    }
-    // ---------- 50 сек. перевірка доступності MQTT та публікація температури ---------
+    // ---------- 50 сек. проверка доступности MQTT и публикация температуры ---------
 //    if(second == 50 && mqttOn && !alarm_stat && WIFI_connected) {
-//      if(WiFi.status() != WL_CONNECTED) {
-//        WIFI_connected = false;
-//      }
-//      if(!MQTTclient.connected() && WIFI_connected) {
-//        reconnect();
-//      }
-//      if(MQTTclient.connected() && WIFI_connected) {
-//        if(sensorTemp  && String(mqtt_pub_temp) != "" && t3 != -85) MQTTclient.publish(mqtt_pub_temp, String(t3).c_str());
-//        if(sensorHumi == 2 && String(mqtt_pub_hum) != "" && humSi7021) MQTTclient.publish(mqtt_pub_hum, (String(humSi7021)).c_str());
-//        if(sensorHumi == 4 && String(mqtt_pub_hum) != "" && humBme) MQTTclient.publish(mqtt_pub_hum, (String(humBme)).c_str());
-//        if(sensorPrAl == 3 && String(mqtt_pub_press) != "" && pressBmp) MQTTclient.publish(mqtt_pub_press, String(pressBmp).c_str());
-//        if(sensorPrAl == 4 && String(mqtt_pub_press) != "" && pressBme) MQTTclient.publish(mqtt_pub_press, String(pressBme).c_str());
-//      }
-//    }
+    if(mqttOn && WIFI_connected) {      
+      if(WiFi.status() != WL_CONNECTED) {
+        WIFI_connected = false;
+      }
+      if(!MQTTclient.connected() && WIFI_connected) {
+        reconnect();
+      }
+      if(MQTTclient.connected() && WIFI_connected) {
+        if(sensorTemp  && String(mqtt_pub_temp) != "" && t3 != -85) MQTTclient.publish(mqtt_pub_temp, String(t3).c_str());
+        if(sensorHumi == 2 && String(mqtt_pub_hum) != "" && humSi7021) MQTTclient.publish(mqtt_pub_hum, (String(humSi7021)).c_str());
+        if(sensorHumi == 4 && String(mqtt_pub_hum) != "" && humBme) MQTTclient.publish(mqtt_pub_hum, (String(humBme)).c_str());
+        if(sensorPrAl == 3 && String(mqtt_pub_press) != "" && pressBmp) MQTTclient.publish(mqtt_pub_press, String(pressBmp).c_str());
+        if(sensorPrAl == 4 && String(mqtt_pub_press) != "" && pressBme) MQTTclient.publish(mqtt_pub_press, String(pressBme).c_str());
+      }
+    }
 //  }
 //  }
-  // ---------- якщо мережа WiFi доступна то виконуємо наступні функції ----------------------------
+  // ---------- если сеть WiFi доступна то выполняем следующие функции ----------------------------
   if(WIFI_connected){
     if(mqttOn) MQTTclient.loop();           // перевіряємо чи намає вхідних повідомлень, як є, то кoлбек функція
+    if(thingOn) sendToThingSpeak();
   }
 }
 //======================================================================================
@@ -386,21 +399,25 @@ void sendToThingSpeak(){
   str+="?api_key=";
   str+=writeapikey;
   if(sensorTemp>0){
-    str+="&field1=";
+    str+="&field5=";
     str+=String(t3);
   }
   if(sensorHumi>0){
-    str+="&field2=";
+    str+="&field6=";
     str+=String(h0);
   }
   if(sensorPrAl>0){
-    str+="&field3=";
+    str+="&field7=";
     str+=String(p0);
   }
   if(akbOnOff == 1){
-  str+="&field4=";
+  str+="&field8=";
   str+=String(uBat);
   } 
+  HTTPClient client;
+  client.begin(str);
+  int httpCode=client.GET();
+  client.end();
   }
  }
 //------------ function urlencode for weather parameters --------------------
