@@ -135,6 +135,8 @@ void setup() {
   display.flipScreenVertically();
   display.setFont(ArialMT_Plain_24);  
   Wire.begin(); 
+  Serial.begin(115200);
+  Serial.println("");
   //pinMode(BUT_PIN, INPUT);
   //digitalWrite(BUT_PIN, !butStat);
   delay(500);
@@ -269,6 +271,7 @@ void loop() {
   if(WIFI_connected){
     if(mqttOn) MQTTclient.loop();           // перевіряємо чи намає вхідних повідомлень, як є, то кoлбек функція
     if(thingOn) sendToThingSpeak();
+    bip();
   }
 }
 //======================================================================================
@@ -282,6 +285,9 @@ void wifiConnect(){
     if(WiFi.status()==WL_CONNECTED){
       WIFI_connected=true;
       return;
+      bip();
+      bip();
+      bip();
     }
     delay (1000);
   }
@@ -414,10 +420,18 @@ void sendToThingSpeak(){
   str+="&field8=";
   str+=String(uBat);
   } 
+  bip();
   HTTPClient client;
   client.begin(str);
   int httpCode=client.GET();
+  String httpData;
+  httpData=client.getString();
+  Serial.print("Server returned: ");
+  Serial.println(httpData);
   client.end();
+  httpData="";
+  Serial.println();
+  bip();
   }
  }
 //------------ function urlencode for weather parameters --------------------
