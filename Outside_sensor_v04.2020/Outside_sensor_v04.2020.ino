@@ -135,8 +135,6 @@ void setup() {
   display.flipScreenVertically();
   display.setFont(ArialMT_Plain_24);  
   Wire.begin(); 
-  Serial.begin(115200);
-  Serial.println("");
   //pinMode(BUT_PIN, INPUT);
   //digitalWrite(BUT_PIN, !butStat);
   delay(500);
@@ -271,7 +269,6 @@ void loop() {
   if(WIFI_connected){
     if(mqttOn) MQTTclient.loop();           // перевіряємо чи намає вхідних повідомлень, як є, то кoлбек функція
     if(thingOn) sendToThingSpeak();
-    bip();
   }
 }
 //======================================================================================
@@ -285,9 +282,6 @@ void wifiConnect(){
     if(WiFi.status()==WL_CONNECTED){
       WIFI_connected=true;
       return;
-      bip();
-      bip();
-      bip();
     }
     delay (1000);
   }
@@ -404,15 +398,15 @@ void sendToThingSpeak(){
   String str="http://api.thingspeak.com/update";
   str+="?api_key=";
   str+=writeapikey;
-  if(sensorTemp>0){
+  if(sensorTemp > -55 and sensorTemp < 120){
     str+="&field5=";
     str+=String(t3);
   }
-  if(sensorHumi>0){
+  if(sensorHumi > -1 and sensorHumi < 101){
     str+="&field6=";
     str+=String(h0);
   }
-  if(sensorPrAl>0){
+  if(sensorPrAl > 700 and sensorPrAl < 780){
     str+="&field7=";
     str+=String(p0);
   }
@@ -420,18 +414,10 @@ void sendToThingSpeak(){
   str+="&field8=";
   str+=String(uBat);
   } 
-  bip();
   HTTPClient client;
   client.begin(str);
   int httpCode=client.GET();
-  String httpData;
-  httpData=client.getString();
-  Serial.print("Server returned: ");
-  Serial.println(httpData);
   client.end();
-  httpData="";
-  Serial.println();
-  bip();
   }
  }
 //------------ function urlencode for weather parameters --------------------
