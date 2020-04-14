@@ -406,7 +406,7 @@ void sendToThingSpeak(){
     str+="&field6=";
     str+=String(h0);
   }
-  if(sensorPrAl > 700 and sensorPrAl < 780){
+  if(sensorPrAl > 720 and sensorPrAl < 780){
     str+="&field7=";
     str+=String(p0);
   }
